@@ -43,29 +43,33 @@ commands:
             fi
 
 jobs:
-  build_backend:
+  build-frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: npm i --prefix backend
-      - run: npm run lint --prefix backend
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/backend/node_modules
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Build front-end
+          command: npm run build
+      - save_cache:
+          paths: [frontend/node_modules]
+          key: frontend-build
 
-  build_frontend:
+  build-backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - run: npm i --prefix frontend
-      - run: npm run lint --prefix frontend
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/frontend/node_modules
+      - restore_cache:
+          keys: [backend-build]
+      - run:
+          name: Back-end build
+          command: npm run build
+      - save_cache:
+          paths: [backend/node_modules]
+          key: backend-build
 
   test-frontend:
     docker:
