@@ -102,16 +102,11 @@ npm install
 run: npm audit --audit-level=critical
 
   scan-backend:
-    docker:
+     docker:
       - image: circleci/node:13.8.0
     steps:
-       - checkout
-      - attach_workspace:
-          at: ~/
-  cd frontend
-npm install
-# npm install oauth-sign@^0.9.0
-run: npm audit --audit-level=critical
+      - checkout
+      - run: npm audit --audit-level=critical --prefix backend
 
   deploy-infrastructure:
     docker:
