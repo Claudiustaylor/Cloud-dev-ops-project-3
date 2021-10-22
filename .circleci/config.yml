@@ -68,27 +68,26 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
 
-  test-frontend:
-    docker:
-       - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/
-      cd frontend
-      npm install
-      npm run test
-
-  test-backend:
+  test_frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
       - attach_workspace:
           at: ~/
-      cd frontend
-      npm install
-      npm run test
+      - run: npm i --prefix frontend
+      - run: npm run test --prefix frontend
+
+
+    test_backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - run: npm i --prefix backend
+      - run: npm run test --prefix backend
 
   scan-frontend:
     docker:
