@@ -100,6 +100,10 @@ npm install
 # npm install oauth-sign@^0.9.0
 run: npm audit --audit-level=critical
 
+npm audit fix --audit-level=critical --force
+# If the "npm audit fix" command above could not fix all critical vulnerabilities, try “npm audit fix --force” again
+npm audit --audit-level=critical
+
   scan-backend:
     docker:
       - image: circleci/node:13.8.0
@@ -111,6 +115,10 @@ run: npm audit --audit-level=critical
 npm install
 # npm install oauth-sign@^0.9.0
 run: npm audit --audit-level=critical
+
+npm audit fix --audit-level=critical --force
+# If the "npm audit fix" command above could not fix all critical vulnerabilities, try “npm audit fix --force” again
+npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
