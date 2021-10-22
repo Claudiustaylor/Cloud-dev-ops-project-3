@@ -102,6 +102,7 @@ jobs:
     steps:
       - checkout
       - run: npm audit --audit-level=critical --prefix frontend
+      
   deploy-infrastructure:
     docker:
       # Docker image here that supports AWS CLI
