@@ -89,25 +89,19 @@ jobs:
       - run: npm i --prefix backend
       - run: npm run test --prefix backend
 
-  scan-frontend:
+  scan backend:
     docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/
-      cd frontend
-npm install
-# npm install oauth-sign@^0.9.0
-run: npm audit --audit-level=critical
-
-  scan-backend:
-     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
       - run: npm audit --audit-level=critical --prefix backend
 
+  scan frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run: npm audit --audit-level=critical --prefix frontend
   deploy-infrastructure:
     docker:
       # Docker image here that supports AWS CLI
