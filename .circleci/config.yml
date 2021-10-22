@@ -42,7 +42,9 @@ jobs:
       - run:
           name: Build front-end
           command: |
-            # Your code here
+            cd frontend
+            npm install
+            npm run build
             exit 1
       - save_cache:
           paths: [frontend/node_modules]
@@ -58,7 +60,9 @@ jobs:
       - run:
           name: Back-end build
           command: |
-            # Your code here
+            cd frontend
+            npm install
+            npm run build
             exit 1
       - save_cache:
           paths: [backend/node_modules]
@@ -66,35 +70,49 @@ jobs:
 
   test-frontend:
     docker:
-      # Docker image here
+       - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - checkout
+      - attach_workspace:
+          at: ~/
+      cd frontend
+      npm install
+      npm run test
 
   test-backend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - checkout
+      - attach_workspace:
+          at: ~/
+      cd frontend
+      npm install
+      npm run test
 
   scan-frontend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+      - checkout
+      - attach_workspace:
+          at: ~/
+      cd frontend
+npm install
+# npm install oauth-sign@^0.9.0
+run: npm audit --audit-level=critical
 
   scan-backend:
     docker:
-      # Docker image here
+      - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
-      # Restore from cache
-      # Your job code here
+       - checkout
+      - attach_workspace:
+          at: ~/
+  cd frontend
+npm install
+# npm install oauth-sign@^0.9.0
+run: npm audit --audit-level=critical
 
   deploy-infrastructure:
     docker:
@@ -293,3 +311,4 @@ workflows:
           requires: [smoke-test]
       - cleanup:
           requires: [cloudfront-update]
+
