@@ -6,8 +6,8 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      workflow_id:
-        type: "string"
+     workflow_id:
+        type: string
     steps:
       - run:
           name: Destroy environments
@@ -18,7 +18,6 @@ commands:
             aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-    parameters:
       # Add parameter here
     steps:
       - run:
@@ -72,7 +71,7 @@ jobs:
           paths: [backend/node_modules]
           key: backend-build
 
- test_frontend:
+  test_frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
@@ -82,7 +81,8 @@ jobs:
       - run: npm i --prefix frontend
       - run: npm run test --prefix frontend
 
-  test_backend:
+
+    test_backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
@@ -92,38 +92,20 @@ jobs:
       - run: npm i --prefix backend
       - run: npm run test --prefix backend
 
-  scan-frontend:
+  scan backend:
     docker:
       - image: circleci/node:13.8.0
     steps:
       - checkout
-      - attach_workspace:
-          at: ~/
-      cd frontend
-npm install
-# npm install oauth-sign@^0.9.0
-run: npm audit --audit-level=critical
+      - run: npm audit --audit-level=critical --prefix backend
 
-npm audit fix --audit-level=critical --force
-# If the "npm audit fix" command above could not fix all critical vulnerabilities, try “npm audit fix --force” again
-npm audit --audit-level=critical
-
-  scan-backend:
+  scan frontend:
     docker:
       - image: circleci/node:13.8.0
     steps:
-       - checkout
-      - attach_workspace:
-          at: ~/
-  cd frontend
-npm install
-# npm install oauth-sign@^0.9.0
-run: npm audit --audit-level=critical
-
-npm audit fix --audit-level=critical --force
-# If the "npm audit fix" command above could not fix all critical vulnerabilities, try “npm audit fix --force” again
-npm audit --audit-level=critical
-
+      - checkout
+      - run: npm audit --audit-level=critical --prefix frontend
+      
   deploy-infrastructure:
     docker:
       # Docker image here that supports AWS CLI
@@ -321,3 +303,4 @@ workflows:
           requires: [smoke-test]
       - cleanup:
           requires: [cloudfront-update]
+
