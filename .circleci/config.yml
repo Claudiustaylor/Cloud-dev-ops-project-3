@@ -1,7 +1,6 @@
 version: 2.1
 
-orbs:
-  slack: circleci/slack@4.1
+
 commands:
   destroy-aws-resource:
     description: Destroy all cloudformation stacks given a workflow ID.
