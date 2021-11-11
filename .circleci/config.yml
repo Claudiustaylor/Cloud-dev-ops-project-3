@@ -1,5 +1,7 @@
 version: 2.1
 
+orbs:
+  slack: circleci/slack@4.1
 commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
@@ -11,8 +13,9 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
-            # Your code here
-            exit 1
+            aws cloudformation delete-stack --stack-name backend-<< parameters.workflow_id >>
+            aws cloudformation delete-stack --stack-name frontend-<< parameters.workflow_id >>
+            aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
       # Add parameter here
@@ -300,4 +303,5 @@ workflows:
           requires: [smoke-test]
       - cleanup:
           requires: [cloudfront-update]
+
 
